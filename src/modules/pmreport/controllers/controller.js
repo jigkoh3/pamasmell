@@ -114,7 +114,7 @@ exports.hook = (req, res) => {
             name: 'station name',
             aqi: req.body.events[0].message.text,
             createby: {
-                _id: req.body.events[1] ? req.body.events[1].source.userId || '' : '',
+                _id: req.body.events[1].source.userId || '',
                 username: 'jigkoh',
                 displayname: 'theera'
             }

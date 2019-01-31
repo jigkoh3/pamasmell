@@ -139,7 +139,13 @@ describe('Pmreport CRUD routes tests', function () {
             .post('/webhook')
             .send({
                 events: [
-                    { message: { type: "text", text: "54" } }
+                    { message: { type: "text", text: "54" } },
+                    {
+                        source: {
+                            type: "user",
+                            userId: "U4af4980629"
+                        }
+                    }
                 ]
             })
             .expect(200)
@@ -149,6 +155,7 @@ describe('Pmreport CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 assert.equal(resp.data.aqi, 54);
+                assert.equal(resp.data.createby._id,'U4af4980629')
                 done();
             });
     })
@@ -158,7 +165,13 @@ describe('Pmreport CRUD routes tests', function () {
             .post('/webhook')
             .send({
                 events: [
-                    { message: { type: "text", text: "ccc" } }
+                    { message: { type: "text", text: "ccc" } },
+                    {
+                        source: {
+                            type: "user",
+                            userId: "U4af4980629"
+                        }
+                    }
                 ]
             })
             .expect(200)
@@ -168,6 +181,7 @@ describe('Pmreport CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 assert.equal(resp.data.message, 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)');
+                
                 done();
             });
     })
