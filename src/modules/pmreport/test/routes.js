@@ -27,17 +27,17 @@ describe('Pmreport CRUD routes tests', function () {
         done();
     });
 
-    it('should be Pmreport get use token', (done)=>{
+    it('should be Pmreport get use token', (done) => {
         request(app)
-        .get('/api/pmreports')
-        .expect(200)
-        .end((err, res)=>{
-            if (err) {
-                return done(err);
-            }
-            var resp = res.body;
-            done();
-        });
+            .get('/api/pmreports')
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                done();
+            });
     });
 
     it('should be Pmreport get by id', function (done) {
@@ -69,7 +69,7 @@ describe('Pmreport CRUD routes tests', function () {
 
     });
 
-    it('should be Pmreport post use token', (done)=>{
+    it('should be Pmreport post use token', (done) => {
         request(app)
             .post('/api/pmreports')
             .send(mockup)
@@ -133,6 +133,23 @@ describe('Pmreport CRUD routes tests', function () {
             });
 
     });
+
+    it('should be line bot connect to auto reply message', (done) => {
+        request(app)
+            .post('/webhook')
+            .send({
+                events: [
+                    { message: { type: "text", text: "54" } }
+                ]
+            })
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    })
 
 
     afterEach(function (done) {

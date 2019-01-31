@@ -1,12 +1,13 @@
 'use strict';
 var mongoose = require('mongoose'),
-    model = require('../models/model'), 
+    model = require('../models/model'),
     Pmreport = mongoose.model('Pmreport'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
-    _ = require('lodash');
-    
+    _ = require('lodash'),
+    request = require('request');
+
 exports.getList = function (req, res) {
-        Pmreport.find(function (err, datas) {
+    Pmreport.find(function (err, datas) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -22,9 +23,9 @@ exports.getList = function (req, res) {
 };
 
 exports.create = function (req, res) {
-        var newPmreport = new Pmreport(req.body);
-        // newPmreport.createby = req.user;
-        newPmreport.save(function (err, data) {
+    var newPmreport = new Pmreport(req.body);
+    // newPmreport.createby = req.user;
+    newPmreport.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -102,3 +103,35 @@ exports.delete = function (req, res) {
         };
     });
 };
+
+exports.hook = (req, res) => {
+    if (req.body.events[0].message.type !== 'text') {
+        res.sendStatus(400)
+    }
+    if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
+        // reply(req.body);
+        res.sendStatus(200);
+    } 
+    
+}
+
+const reply = (bodyResponse) => {
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer {xxxxxxx}'
+    }
+    let body = JSON.stringify({
+        replyToken: bodyResponse.events[0].replyToken,
+        messages: [{
+            type: `text`,
+            text: `ขอบคุณครับสำหรับข้อมูล : ${bodyResponse.events[0].message.text}`
+        }]
+    })
+    request.post({
+        url: 'https://api.line.me/v2/bot/message/reply',
+        headers: headers,
+        body: body
+    }, (err, res, body) => {
+        console.log('status = ' + res.statusCode);
+    });
+}
