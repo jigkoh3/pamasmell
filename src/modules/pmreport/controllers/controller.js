@@ -109,7 +109,7 @@ exports.hook = (req, res) => {
         res.sendStatus(400)
     }
     if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
-        
+
         var newPmreport = new Pmreport({
             name: 'name',
             aqi: req.body.events[0].message.text,
@@ -133,6 +133,18 @@ exports.hook = (req, res) => {
                 });
             };
         });
+    } else if (req.body.events[0].message.text === '?') {
+        replySummaryReport(req.body);
+        res.jsonp({
+            status: 200,
+            data: {message: 'template'}
+        });
+    } else {
+        replyException(req.body);
+        res.jsonp({
+            status: 200,
+            data: {message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)'}
+        });
     }
 
 }
@@ -148,6 +160,79 @@ const reply = (bodyResponse) => {
             type: `text`,
             text: `ขอบคุณครับสำหรับข้อมูล : ${bodyResponse.events[0].message.text}`
         }]
+    })
+    request.post({
+        url: 'https://api.line.me/v2/bot/message/reply',
+        headers: headers,
+        body: body
+    }, (err, res, body) => {
+        console.log('status = ' + res.statusCode);
+    });
+}
+
+const replyException = (bodyResponse) => {
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
+    }
+    let body = JSON.stringify({
+        replyToken: bodyResponse.events[0].replyToken,
+        messages: [
+            {
+                type: `text`,
+                text: `กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)`
+            }
+        ]
+    })
+    request.post({
+        url: 'https://api.line.me/v2/bot/message/reply',
+        headers: headers,
+        body: body
+    }, (err, res, body) => {
+        console.log('status = ' + res.statusCode);
+    });
+}
+
+const replySummaryReport = (bodyResponse) => {
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
+    }
+    let body = JSON.stringify({
+        replyToken: bodyResponse.events[0].replyToken,
+        messages: [
+            {
+                "type": "template",
+                "altText": "this is a carousel template",
+                "template": {
+                    "type": "carousel",
+                    "columns": [
+                        {
+                            "title": "44",
+                            "text": "บ้านฟ้า min: 43 | max: 45",
+                            "actions": [
+                                {
+                                    "type": "uri",
+                                    "label": "View detail",
+                                    "uri": "http://example.com/page/111"
+                                }
+                            ]
+                        },
+                        {
+                            "title": "40",
+                            "text": " วราบดินทร์ min: 39 | max: 41",
+                            "actions": [
+                                {
+                                    "type": "uri",
+                                    "label": "View detail",
+                                    "uri": "http://example.com/page/111"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
     })
     request.post({
         url: 'https://api.line.me/v2/bot/message/reply',

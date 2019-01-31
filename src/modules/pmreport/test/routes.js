@@ -153,6 +153,44 @@ describe('Pmreport CRUD routes tests', function () {
             });
     })
 
+    it('should be line bot connect to auto reply exception message', (done) => {
+        request(app)
+            .post('/webhook')
+            .send({
+                events: [
+                    { message: { type: "text", text: "ccc" } }
+                ]
+            })
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                assert.equal(resp.data.message, 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)');
+                done();
+            });
+    })
+
+    it('should be line bot connect to auto reply template message', (done) => {
+        request(app)
+            .post('/webhook')
+            .send({
+                events: [
+                    { message: { type: "text", text: "?" } }
+                ]
+            })
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                assert.equal(resp.data.message, 'template');
+                done();
+            });
+    })
+
 
     afterEach(function (done) {
         Pmreport.remove().exec(done);
