@@ -109,7 +109,7 @@ exports.hook = (req, res) => {
         res.sendStatus(400)
     }
     if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
-        // reply(req.body);
+        reply(req.body);
         res.sendStatus(200);
     } 
     
@@ -118,7 +118,7 @@ exports.hook = (req, res) => {
 const reply = (bodyResponse) => {
     let headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer {xxxxxxx}'
+        'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
     }
     let body = JSON.stringify({
         replyToken: bodyResponse.events[0].replyToken,
