@@ -109,10 +109,32 @@ exports.hook = (req, res) => {
         res.sendStatus(400)
     }
     if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
-        reply(req.body);
-        res.sendStatus(200);
-    } 
-    
+        
+        var newPmreport = new Pmreport({
+            name: 'name',
+            aqi: req.body.events[0].message.text,
+            createby: {
+                _id: '1234',
+                username: 'jigkoh',
+                displayname: 'theera'
+            }
+        });
+        newPmreport.save(function (err, data) {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                reply(req.body);
+                res.jsonp({
+                    status: 200,
+                    data: data
+                });
+            };
+        });
+    }
+
 }
 
 const reply = (bodyResponse) => {

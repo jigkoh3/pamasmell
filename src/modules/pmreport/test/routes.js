@@ -147,6 +147,8 @@ describe('Pmreport CRUD routes tests', function () {
                 if (err) {
                     return done(err);
                 }
+                var resp = res.body;
+                assert.equal(resp.data.aqi, 54);
                 done();
             });
     })
