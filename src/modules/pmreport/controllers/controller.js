@@ -158,7 +158,7 @@ const reply = (bodyResponse) => {
         replyToken: bodyResponse.events[0].replyToken,
         messages: [{
             type: `text`,
-            text: `ขอบคุณครับสำหรับข้อมูล : ${bodyResponse}`
+            text: `ขอบคุณครับสำหรับข้อมูล : ${JSON.stringify(bodyResponse)}`
         }]
     })
     request.post({
