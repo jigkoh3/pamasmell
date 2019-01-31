@@ -111,10 +111,10 @@ exports.hook = (req, res) => {
     if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
 
         var newPmreport = new Pmreport({
-            name: 'name',
+            name: 'station name',
             aqi: req.body.events[0].message.text,
             createby: {
-                _id: '1234',
+                _id: req.body.events[1].source.userId,
                 username: 'jigkoh',
                 displayname: 'theera'
             }
