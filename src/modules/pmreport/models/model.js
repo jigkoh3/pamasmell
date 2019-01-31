@@ -9,6 +9,10 @@ var PmreportSchema = new Schema({
         type: String,
         required: 'Please fill a Pmreport name',
     },
+    aqi: {
+        type: Number,
+        required: 'Please fill a Pmreport aqi',
+    },
     created: {
         type: Date,
         default: Date.now

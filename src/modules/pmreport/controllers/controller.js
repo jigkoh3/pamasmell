@@ -23,7 +23,7 @@ exports.getList = function (req, res) {
 
 exports.create = function (req, res) {
         var newPmreport = new Pmreport(req.body);
-        newPmreport.createby = req.user;
+        // newPmreport.createby = req.user;
         newPmreport.save(function (err, data) {
         if (err) {
             return res.status(400).send({
