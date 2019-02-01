@@ -306,7 +306,7 @@ const replyException = (bodyResponse) => {
         messages: [
             {
                 type: `text`,
-                text: `กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)`
+                text: `กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า PM2.5)`
             }
         ]
     })
