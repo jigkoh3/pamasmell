@@ -264,7 +264,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].min > element.aqi) {
                     req.columns[lst.indexOf(element.name)].min = element.aqi;
                 }
-                if (req.columns[lst.indexOf(element.name)].max < req.columns[lst.indexOf(element.name)].aqi) {
+                if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
                 req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
