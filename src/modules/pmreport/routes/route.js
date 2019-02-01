@@ -5,7 +5,11 @@ module.exports = function (app) {
     var url = '/api/pmreports';
     var urlWithParam = '/api/pmreports/:pmreportId';
 
-    app.route('/webhook').post(controller.hook);
+    app.route('/webhook').post(controller.getUserProfile
+        , controller.updateNews
+        , controller.getReport
+        , controller.replyException);
+        
     app.route(url).all(policy.isAllowed)
         .get(controller.getList)
         .post(controller.create);
