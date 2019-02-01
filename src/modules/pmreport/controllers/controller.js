@@ -104,6 +104,64 @@ exports.delete = function (req, res) {
     });
 };
 
+exports.getUserProfile = (req, res, next)=>{
+    if (req.body.events[0].message.type !== 'text') {
+        res.sendStatus(400)
+    }
+    next();
+}
+
+exports.updateNews = (req, res, next)=>{
+    if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
+
+        var newPmreport = new Pmreport({
+            name: 'station name',
+            aqi: req.body.events[0].message.text,
+            createby: {
+                _id: req.body.events[0].source.userId || '',
+                username: 'jigkoh',
+                displayname: 'theera'
+            }
+        });
+        newPmreport.save(function (err, data) {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                reply(req.body);
+                res.jsonp({
+                    status: 200,
+                    data: data
+                });
+            };
+        });
+    }else{
+        next();
+    }
+}
+
+exports.getReport = (req, res, next)=>{
+    if (req.body.events[0].message.text === '?') {
+        replySummaryReport(req.body);
+        res.jsonp({
+            status: 200,
+            data: {message: 'template'}
+        });
+    }else{
+        next();
+    }
+}
+
+exports.replyException = (req, res, next)=>{
+    replyException(req.body);
+    res.jsonp({
+        status: 200,
+        data: {message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)'}
+    });
+}
+
 exports.hook = (req, res) => {
     if (req.body.events[0].message.type !== 'text') {
         res.sendStatus(400)
