@@ -19,7 +19,8 @@ describe('Pmreport CRUD routes tests', function () {
         user = {
             name: 'name2',
             userid: 'U19947b3363cd6f914e292d4c45cb0558',
-            stationgroup: 'วราบดินทร์'
+            stationgroup: 'วราบดินทร์',
+            devicename: 'sony xx'
         };
 
         // let _user = new User(user);

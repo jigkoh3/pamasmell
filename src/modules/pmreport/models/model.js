@@ -57,6 +57,7 @@ var UserSchema = new Schema({
         type: String,
         required: 'Please fill a Station Group',
     },
+    devicename: String,
     created: {
         type: Date,
         default: Date.now
