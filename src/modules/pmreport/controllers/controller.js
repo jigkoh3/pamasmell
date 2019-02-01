@@ -224,7 +224,7 @@ exports.getPMData = (req, res, next) => {
                     message: errorHandler.getErrorMessage(err)
                 });
             } else {
-                req.data = data;
+                req.data = data || [];
                 next();
             };
         })
@@ -259,16 +259,16 @@ exports.cookTemplateData = (req, res, next) => {
                     ]
                 });
             } else {
-                // req.columns[lst.indexOf(element.name)].sum += element.aqi;
-                // req.columns[lst.indexOf(element.name)].cnt += 1;
-                // if (req.columns[lst.indexOf(element.name)].min > element.aqi) {
-                //     req.columns[lst.indexOf(element.name)].min = element.aqi;
-                // }
-                // if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
-                //     req.columns[lst.indexOf(element.name)].max = element.aqi;
-                // }
-                // req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
-                // req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
+                req.columns[lst.indexOf(element.name)].sum += element.aqi;
+                req.columns[lst.indexOf(element.name)].cnt += 1;
+                if (req.columns[lst.indexOf(element.name)].min > element.aqi) {
+                    req.columns[lst.indexOf(element.name)].min = element.aqi;
+                }
+                if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
+                    req.columns[lst.indexOf(element.name)].max = element.aqi;
+                }
+                req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
             }
 
         });
