@@ -233,27 +233,50 @@ exports.getPMData = (req, res, next) => {
     }
 }
 
-exports.cookTemplateData = (req, res, next)=>{
-    req.columns =[];
-    if(req.data){
+exports.cookTemplateData = (req, res, next) => {
+    let lst = [];
+    let min, max = 0;
+    req.columns = [];
+    if (req.data) {
         req.data.forEach(element => {
-            req.columns.push({
-                title: element.aqi,
-                text: element.name,
-                actions: [
-                    {
-                        type: "uri",
-                        label: "View detail",
-                        uri: "http://example.com/page/111"
-                    }
-                ]
-            });
+            if (lst.indexOf(element.name) === -1) {
+                lst.push(element.name);
+                min = element.aqi;
+                max = element.aqi;
+                req.columns.push({
+                    title: element.aqi,
+                    text: `${element.name} min:${min} | max:${max}`,
+                    min: element.aqi,
+                    max: element.aqi,
+                    sum: element.aqi,
+                    cnt: 1,
+                    actions: [
+                        {
+                            type: "uri",
+                            label: "View detail",
+                            uri: "http://example.com/page/111"
+                        }
+                    ]
+                });
+            } else {
+                req.columns[lst.indexOf(element.name)].sum += element.aqi;
+                req.columns[lst.indexOf(element.name)].cnt += 1;
+                if (req.columns[lst.indexOf(element.name)].min > element.aqi) {
+                    req.columns[lst.indexOf(element.name)].min = element.aqi;
+                }
+                if (req.columns[lst.indexOf(element.name)].max < req.columns[lst.indexOf(element.name)].aqi) {
+                    req.columns[lst.indexOf(element.name)].max = element.aqi;
+                }
+                req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
+            }
+
         });
         next();
-    }else{
+    } else {
         next();
     }
-    
+
 }
 
 exports.getReport = (req, res, next) => {
@@ -365,7 +388,7 @@ const replyException = (bodyResponse) => {
     });
 }
 
-const replySummaryReport = (bodyResponse,columns) => {
+const replySummaryReport = (bodyResponse, columns) => {
     let headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
