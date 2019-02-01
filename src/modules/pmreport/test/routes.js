@@ -209,26 +209,54 @@ describe('Pmreport CRUD routes tests', function () {
 
     it('should be line bot connect to auto reply template message', (done) => {
         request(app)
-            .post('/webhook')
-            .send({
-                "events": [{
-                    type: "message",
-                    replyToken: "240eb82ca256405b9295d3d94fb3e47a",
-                    source: { userId: "U19947b3363cd6f914e292d4c45cb0558", type: "user" },
-                    timestamp: 1548975245547,
-                    message: { type: "text", id: "9279140114603", text: "?" }
-                }],
-                destination: "Uff875d88b89f51a8bf83d2b4e04b4067"
-            })
+            .post('/api/users')
+            .send(user)
             .expect(200)
             .end(function (err, res) {
                 if (err) {
                     return done(err);
                 }
-                var resp = res.body;
-                assert.equal(resp.data.message, 'template');
-                done();
+                request(app)
+                    .post('/webhook')
+                    .send({
+                        "events": [{
+                            type: "message",
+                            replyToken: "240eb82ca256405b9295d3d94fb3e47a",
+                            source: { userId: "U19947b3363cd6f914e292d4c45cb0558", type: "user" },
+                            timestamp: 1548975245547,
+                            message: { type: "text", id: "9279140114603", text: "72" }
+                        }],
+                        destination: "Uff875d88b89f51a8bf83d2b4e04b4067"
+                    })
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) {
+                            return done(err);
+                        }
+                        request(app)
+                            .post('/webhook')
+                            .send({
+                                "events": [{
+                                    type: "message",
+                                    replyToken: "240eb82ca256405b9295d3d94fb3e47a",
+                                    source: { userId: "U19947b3363cd6f914e292d4c45cb0558", type: "user" },
+                                    timestamp: 1548975245547,
+                                    message: { type: "text", id: "9279140114603", text: "?" }
+                                }],
+                                destination: "Uff875d88b89f51a8bf83d2b4e04b4067"
+                            })
+                            .expect(200)
+                            .end(function (err, res) {
+                                if (err) {
+                                    return done(err);
+                                }
+                                var resp = res.body;
+                                assert.equal(resp.data.length, 1);
+                                done();
+                            });
+                    });
             });
+
     })
 
     //user
@@ -254,10 +282,10 @@ describe('Pmreport CRUD routes tests', function () {
 
 
     afterEach(function (done) {
-        User.remove().exec(()=>{
+        User.remove().exec(() => {
             Pmreport.remove().exec(done);
         });
-        
+
     });
 
 });

@@ -106,7 +106,7 @@ exports.createUser = function (req, res) {
 
 exports.getByUserID = function (req, res, next, id) {
 
-    User.findOne({'userid': id}, function (err, data) {
+    User.findOne({ 'userid': id }, function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -161,11 +161,11 @@ exports.delete = function (req, res) {
     });
 };
 
-exports.getUserProfile = (req, res, next)=>{
+exports.getUserProfile = (req, res, next) => {
     if (req.body.events[0].message.type !== 'text') {
         res.sendStatus(400)
     }
-    User.findOne({'userid': req.body.events[0].source.userId}, function (err, data) {
+    User.findOne({ 'userid': req.body.events[0].source.userId }, function (err, data) {
         if (err) {
             next();
         } else {
@@ -176,9 +176,9 @@ exports.getUserProfile = (req, res, next)=>{
     // next();
 }
 
-exports.updateNews = (req, res, next)=>{
+exports.updateNews = (req, res, next) => {
     if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text) && parseFloat(req.body.events[0].message.text) <= 300) {
-        if(req.userData){
+        if (req.userData) {
             var newPmreport = new Pmreport({
                 name: req.userData.stationgroup,
                 aqi: req.body.events[0].message.text,
@@ -201,32 +201,78 @@ exports.updateNews = (req, res, next)=>{
                     });
                 };
             });
-        }else{
+        } else {
             replyNotAuthorize(req.body)
             res.sendStatus(400)
         }
-    }else{
+    } else {
         next();
     }
 }
 
-exports.getReport = (req, res, next)=>{
+exports.getPMData = (req, res, next) => {
     if (req.body.events[0].message.text === '?') {
-        replySummaryReport(req.body);
+        let d = new Date(Date.now() - 60 * 60 * 1000);
+        Pmreport.find({
+            created: {
+                $gt: d
+            },
+        }, (err, data) => {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                req.data = data;
+                next();
+            };
+        })
+    } else {
+        next();
+    }
+}
+
+exports.cookTemplateData = (req, res, next)=>{
+    req.columns =[];
+    if(req.data){
+        req.data.forEach(element => {
+            req.columns.push({
+                title: element.aqi,
+                text: element.name,
+                actions: [
+                    {
+                        type: "uri",
+                        label: "View detail",
+                        uri: "http://example.com/page/111"
+                    }
+                ]
+            });
+        });
+        next();
+    }else{
+        next();
+    }
+    
+}
+
+exports.getReport = (req, res, next) => {
+    if (req.body.events[0].message.text === '?') {
+        replySummaryReport(req.body, req.columns);
         res.jsonp({
             status: 200,
-            data: {message: 'template'}
+            data: req.data
         });
-    }else{
+    } else {
         next();
     }
 }
 
-exports.replyException = (req, res, next)=>{
+exports.replyException = (req, res, next) => {
     replyException(req.body);
     res.jsonp({
         status: 200,
-        data: {message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)'}
+        data: { message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)' }
     });
 }
 
@@ -263,13 +309,13 @@ exports.hook = (req, res) => {
         replySummaryReport(req.body);
         res.jsonp({
             status: 200,
-            data: {message: 'template'}
+            data: { message: 'template' }
         });
     } else {
         replyException(req.body);
         res.jsonp({
             status: 200,
-            data: {message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)'}
+            data: { message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)' }
         });
     }
 
@@ -319,7 +365,7 @@ const replyException = (bodyResponse) => {
     });
 }
 
-const replySummaryReport = (bodyResponse) => {
+const replySummaryReport = (bodyResponse,columns) => {
     let headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
@@ -328,34 +374,11 @@ const replySummaryReport = (bodyResponse) => {
         replyToken: bodyResponse.events[0].replyToken,
         messages: [
             {
-                "type": "template",
-                "altText": "this is a carousel template",
-                "template": {
-                    "type": "carousel",
-                    "columns": [
-                        {
-                            "title": "44",
-                            "text": "บ้านฟ้า min: 43 | max: 45",
-                            "actions": [
-                                {
-                                    "type": "uri",
-                                    "label": "View detail",
-                                    "uri": "http://example.com/page/111"
-                                }
-                            ]
-                        },
-                        {
-                            "title": "40",
-                            "text": " วราบดินทร์ min: 39 | max: 41",
-                            "actions": [
-                                {
-                                    "type": "uri",
-                                    "label": "View detail",
-                                    "uri": "http://example.com/page/111"
-                                }
-                            ]
-                        }
-                    ]
+                type: "template",
+                altText: "this is a carousel template",
+                template: {
+                    type: "carousel",
+                    columns: columns
                 }
             }
         ]

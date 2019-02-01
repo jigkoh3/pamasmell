@@ -7,12 +7,14 @@ module.exports = function (app) {
 
     app.route('/webhook').post(controller.getUserProfile
         , controller.updateNews
+        , controller.getPMData
+        , controller.cookTemplateData
         , controller.getReport
         , controller.replyException);
 
     app.route('/api/users')
-    .get(controller.Users)
-    .post(controller.createUser);
+        .get(controller.Users)
+        .post(controller.createUser);
 
     app.route('/api/users/:userId').get(controller.userById)
 
