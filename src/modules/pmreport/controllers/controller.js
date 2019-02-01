@@ -177,7 +177,7 @@ exports.getUserProfile = (req, res, next)=>{
 }
 
 exports.updateNews = (req, res, next)=>{
-    if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text)) {
+    if (!isNaN(parseFloat(req.body.events[0].message.text)) && isFinite(req.body.events[0].message.text) && parseFloat(req.body.events[0].message.text) <= 300) {
         if(req.userData){
             var newPmreport = new Pmreport({
                 name: req.userData.stationgroup,
