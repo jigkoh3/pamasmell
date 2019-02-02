@@ -247,8 +247,8 @@ exports.cookTemplateData = (req, res, next) => {
                 max = element.aqi;
                 // var d = new Date("2017-03-16T17:46:53.677");
                 // console.log(d.toLocaleString());
-                // timeago = timeAgo(element.created + 35 * 1000);
-                timeago = moment(element.created).format('DD/MM/YYYY h:mm')
+                timeago = timeAgo(element.created + 35 * 1000);
+                //timeago = moment(element.created).format('DD/MM/YYYY h:mm')
                 req.columns.push({
                     title: element.aqi,
                     text: `${element.name}\n${timeago}\n${min}|${max}`,
