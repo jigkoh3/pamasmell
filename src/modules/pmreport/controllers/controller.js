@@ -245,7 +245,7 @@ exports.cookTemplateData = (req, res, next) => {
                 max = element.aqi;
                 req.columns.push({
                     title: element.aqi,
-                    text: `${element.name} min:${min} | max:${max}`,
+                    text: `${element.name} \n min:${min} | max:${max}`,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
