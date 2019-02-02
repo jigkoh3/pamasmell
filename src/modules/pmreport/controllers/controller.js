@@ -250,6 +250,7 @@ exports.cookTemplateData = (req, res, next) => {
                     max: element.aqi,
                     sum: element.aqi,
                     cnt: 1,
+                    lasttime : element.created,
                     actions: [
                         {
                             type: "uri",
@@ -267,7 +268,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
-                req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].text =  `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max} \n ${req.columns[lst.indexOf(element.name)].lasttime}`;
                 req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
             }
 
@@ -338,7 +339,7 @@ exports.hook = (req, res) => {
         replyException(req.body);
         res.jsonp({
             status: 200,
-            data: { message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)' }
+            data: { message: 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า PM2.5)' }
         });
     }
 
