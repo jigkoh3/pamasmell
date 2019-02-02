@@ -9,6 +9,7 @@ var request = require('supertest'),
     Pmreport = mongoose.model('Pmreport'),
     User = mongoose.model('User');
 var timeAgo = require('node-time-ago');
+var moment = require('moment');
 var user,
     token,
     mockup;
@@ -276,6 +277,7 @@ describe('Pmreport CRUD routes tests', function () {
     it('time ago test', (done)=>{
         var aaa = timeAgo(Date.now() + 35 * 1000);
         assert.equal(aaa, "35 second ago");
+        assert.equal(moment(new Date("2017-03-16T17:46:53.677")).format('DD/MM/YYYY h:mm'),"16/03/2017 5:46");
         done();
     })
 

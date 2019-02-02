@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     request = require('request');
 var timeAgo = require('node-time-ago');
-
+var moment = require('moment');
 exports.getList = function (req, res) {
     Pmreport.find(function (err, datas) {
         if (err) {
@@ -245,7 +245,10 @@ exports.cookTemplateData = (req, res, next) => {
                 lst.push(element.name);
                 min = element.aqi;
                 max = element.aqi;
-                timeago = timeAgo(element.created + 35 * 1000);
+                // var d = new Date("2017-03-16T17:46:53.677");
+                // console.log(d.toLocaleString());
+                // timeago = timeAgo(element.created + 35 * 1000);
+                timeago = moment(element.created).format('DD/MM/YYYY h:mm')
                 req.columns.push({
                     title: element.aqi,
                     text: `${element.name}\n${timeago}\n${min}|${max}`,
