@@ -217,7 +217,7 @@ exports.getPMData = (req, res, next) => {
             created: {
                 $gt: d
             }
-        }, null, {created: '-date'}, (err, data) => {
+        }, null, {sort: '-created'}, (err, data) => {
             if (err) {
                 return res.status(400).send({
                     status: 400,
