@@ -216,8 +216,8 @@ exports.getPMData = (req, res, next) => {
         Pmreport.find({
             created: {
                 $gt: d
-            },
-        }, (err, data) => {
+            }
+        }, null, {created: '-date'}, (err, data) => {
             if (err) {
                 return res.status(400).send({
                     status: 400,
