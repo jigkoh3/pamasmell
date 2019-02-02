@@ -245,12 +245,11 @@ exports.cookTemplateData = (req, res, next) => {
                 max = element.aqi;
                 req.columns.push({
                     title: element.aqi,
-                    text: `${element.name} \n min:${min} | max:${max} \n ${element.created}`,
+                    text: `${element.name} min:${min} | max:${max}`,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
                     cnt: 1,
-                    lasttime : element.created,
                     actions: [
                         {
                             type: "uri",
@@ -268,7 +267,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
-                req.columns[lst.indexOf(element.name)].text =  `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max} \n ${req.columns[lst.indexOf(element.name)].lasttime}`;
+                req.columns[lst.indexOf(element.name)].text =  `${element.name} min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
                 req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
             }
 
