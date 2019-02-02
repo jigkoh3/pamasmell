@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash'),
     request = require('request');
+var timeAgo = require('node-time-ago');
 
 exports.getList = function (req, res) {
     Pmreport.find(function (err, datas) {
@@ -217,7 +218,7 @@ exports.getPMData = (req, res, next) => {
             created: {
                 $gt: d
             }
-        }, null, {sort: '-created'}, (err, data) => {
+        }, null, { sort: '-created' }, (err, data) => {
             if (err) {
                 return res.status(400).send({
                     status: 400,
@@ -243,9 +244,10 @@ exports.cookTemplateData = (req, res, next) => {
                 lst.push(element.name);
                 min = element.aqi;
                 max = element.aqi;
+                timeago = timeAgo(Date.now() + 35 * 1000);
                 req.columns.push({
                     title: element.aqi,
-                    text: `${element.name}\n min:${min} | max:${max}`,
+                    text: `${element.name}\n min:${min} | max:${max} | timeago`,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
@@ -267,7 +269,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
-                req.columns[lst.indexOf(element.name)].text =  `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].text = `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
                 req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
             }
 
