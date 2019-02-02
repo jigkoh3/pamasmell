@@ -8,7 +8,7 @@ var request = require('supertest'),
     app = require('../../../config/express'),
     Pmreport = mongoose.model('Pmreport'),
     User = mongoose.model('User');
-
+var timeAgo = require('node-time-ago');
 var user,
     token,
     mockup;
@@ -272,6 +272,12 @@ describe('Pmreport CRUD routes tests', function () {
                 done();
             });
     });
+
+    it('time ago test', (done)=>{
+        var aaa = timeAgo(Date.now() + 35 * 1000);
+        assert.equal(aaa, "35 second ago");
+        done();
+    })
 
 
 

@@ -237,7 +237,7 @@ exports.getPMData = (req, res, next) => {
 exports.cookTemplateData = (req, res, next) => {
     var lst = [];
     var min, max = 0;
-    var timeago = "";
+    var timeago = timeAgo(Date.now() + 35 * 1000);
     req.columns = [];
     if (req.data) {
         req.data.forEach(element => {
