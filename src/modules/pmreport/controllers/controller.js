@@ -270,7 +270,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
-                req.columns[lst.indexOf(element.name)].text = `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].text = `${element.name} \n min:${req.columns[lst.indexOf(element.name)].min} | max:${req.columns[lst.indexOf(element.name)].max} | ${timeago}`;
                 req.columns[lst.indexOf(element.name)].title = req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt;
             }
 
