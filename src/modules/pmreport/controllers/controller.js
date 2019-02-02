@@ -248,7 +248,7 @@ exports.cookTemplateData = (req, res, next) => {
                 timeago = timeAgo(Date.now() + 35 * 1000);
                 req.columns.push({
                     title: element.aqi,
-                    text: `${element.name}\n min:${min} | max:${max} | ${timeago}`,
+                    text: `${element.name}\n min:${min} | max:${max}`,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
