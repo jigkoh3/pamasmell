@@ -252,7 +252,7 @@ exports.cookTemplateData = (req, res, next) => {
                 timeago = timeAgo(element.created + 35 * 1000);
                 //timeago = moment(element.created).format('DD/MM/YYYY h:mm')
                 req.columns.push({
-                    title: `${element.name}, Avg:${element.aqi}`,
+                    title: `${element.name}, Avg1Hr:${element.aqi}`,
                     text: `last update :${element.aqi}(${timeago})\n${min}|${max}`,
                     min: element.aqi,
                     max: element.aqi,
@@ -278,7 +278,7 @@ exports.cookTemplateData = (req, res, next) => {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
                 req.columns[lst.indexOf(element.name)].text = `Last update :${req.columns[lst.indexOf(element.name)].lasted}(${req.columns[lst.indexOf(element.name)].timeago})\n${req.columns[lst.indexOf(element.name)].min}|${req.columns[lst.indexOf(element.name)].max}`;
-                req.columns[lst.indexOf(element.name)].title = `${element.name}, Avg:${Math.round(req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt)}` ;
+                req.columns[lst.indexOf(element.name)].title = `${element.name}, Avg1Hr:${Math.round(req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt)}` ;
             }
 
         });
