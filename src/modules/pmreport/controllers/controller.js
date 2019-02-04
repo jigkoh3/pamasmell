@@ -238,6 +238,7 @@ exports.cookTemplateData = (req, res, next) => {
     var lst = [];
     var min, max = 0;
     var timeago = "ago";//timeAgo(Date.now() + 35 * 1000);
+    var currvalue = 0;
     req.columns = [];
     if (req.data) {
         req.data.forEach(element => {
@@ -245,16 +246,18 @@ exports.cookTemplateData = (req, res, next) => {
                 lst.push(element.name);
                 min = element.aqi;
                 max = element.aqi;
+                
                 // var d = new Date("2017-03-16T17:46:53.677");
                 // console.log(d.toLocaleString());
                 timeago = timeAgo(element.created + 35 * 1000);
                 //timeago = moment(element.created).format('DD/MM/YYYY h:mm')
                 req.columns.push({
                     title: element.aqi,
-                    text: `${element.name}\n${timeago}\n${min}|${max}`,
+                    text: `${element.name}\n${timeago}:${element.aqi}\n${min}|${max}`,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
+                    lasted: element.aqi,
                     cnt: 1,
                     timeago: timeago,
                     actions: [
@@ -274,7 +277,7 @@ exports.cookTemplateData = (req, res, next) => {
                 if (req.columns[lst.indexOf(element.name)].max < element.aqi) {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
-                req.columns[lst.indexOf(element.name)].text = `${element.name}\n${req.columns[lst.indexOf(element.name)].timeago}\n${req.columns[lst.indexOf(element.name)].min}|${req.columns[lst.indexOf(element.name)].max}`;
+                req.columns[lst.indexOf(element.name)].text = `${element.name}\n${req.columns[lst.indexOf(element.name)].timeago}::${req.columns[lst.indexOf(element.name)].lasted}\n${req.columns[lst.indexOf(element.name)].min}|${req.columns[lst.indexOf(element.name)].max}`;
                 req.columns[lst.indexOf(element.name)].title = Math.round(req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt);
             }
 
