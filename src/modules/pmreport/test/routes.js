@@ -283,27 +283,15 @@ describe('Pmreport CRUD routes tests', function () {
         done();
     })
 
-    xit('should be User report pm2.5 with location', (done) => {
+    it('should be User report pm2.5 with location', (done) => {
         request(app)
-            .post('/webhook')
-            .send({
-                "events": [{
-                    type: "message",
-                    replyToken: "240eb82ca256405b9295d3d94fb3e47a",
-                    source: { userId: "U19947b3363cd6f914e292d4c45cb0558", type: "user" },
-                    timestamp: 1548975245547,
-                    message: { type: "text", id: "9279140114603", text: "12" }
-                }],
-                destination: "Uff875d88b89f51a8bf83d2b4e04b4067"
-            })
+            .get('/api/reports')
             .expect(200)
             .end(function (err, res) {
                 if (err) {
                     return done(err);
                 }
                 var resp = res.body;
-                assert.equal(resp.data, 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)');
-
                 done();
             });
     })

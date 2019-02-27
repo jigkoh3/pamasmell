@@ -236,6 +236,30 @@ exports.getPMData = (req, res, next) => {
     }
 }
 
+exports.getPMData2 = (req, res, next) => {
+    if (true) {
+        let d = new Date(Date.now() - 60 * 60 * 1000);
+        Pmreport.find({
+            created: {
+                $gt: d
+            }
+        }, null, { sort: '-created' }, (err, data) => {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                req.data = data || [];
+
+                next();
+            };
+        })
+    } else {
+        next();
+    }
+}
+
 exports.cookTemplateData = (req, res, next) => {
     var lst = [];
     var min, max = 0;
@@ -286,7 +310,8 @@ exports.cookTemplateData = (req, res, next) => {
             }
 
         });
-        next();
+         next();
+
     } else {
         next();
     }
@@ -303,6 +328,12 @@ exports.getReport = (req, res, next) => {
     } else {
         next();
     }
+}
+exports.getReport2 = (req, res, next) => {
+    res.jsonp({
+        status: 200,
+        data:req.columns
+    });
 }
 
 exports.replyException = (req, res, next) => {
