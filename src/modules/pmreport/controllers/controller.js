@@ -212,7 +212,21 @@ exports.updateNews = (req, res, next) => {
         next();
     }
 }
+exports.getUser = (req, res, next) => {
+    User.find((err, data) => {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            req.user = data
+            next();
+        }
 
+
+    })
+}
 exports.getPMData = (req, res, next) => {
     if (req.body.events[0].message.text === '?') {
         let d = new Date(Date.now() - 60 * 60 * 1000);
@@ -259,7 +273,6 @@ exports.getPMData2 = (req, res, next) => {
         next();
     }
 }
-
 exports.cookTemplateData = (req, res, next) => {
     var lst = [];
     var min, max = 0;
@@ -286,6 +299,7 @@ exports.cookTemplateData = (req, res, next) => {
                     max: element.aqi,
                     sum: element.aqi,
                     lasted: element.aqi,
+                    userId: element.createby.id,
                     cnt: 1,
                     timeago: timeago,
                     actions: [
@@ -310,7 +324,7 @@ exports.cookTemplateData = (req, res, next) => {
             }
 
         });
-         next();
+        next();
 
     } else {
         next();
@@ -329,10 +343,20 @@ exports.getReport = (req, res, next) => {
         next();
     }
 }
+// exports.forUserAndCookdata = (req, res, next) => {
+//     req.user.forEach(user => {
+//         req.columns.forEach(column => {
+//             if(column.userId  !== user.userId){
+
+//             }
+//         })
+//     })
+//     next();
+// }
 exports.getReport2 = (req, res, next) => {
     res.jsonp({
         status: 200,
-        data:req.columns
+        data: req.columns
     });
 }
 

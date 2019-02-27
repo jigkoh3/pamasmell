@@ -284,6 +284,17 @@ describe('Pmreport CRUD routes tests', function () {
     })
 
     it('should be User report pm2.5 with location', (done) => {
+        user = {
+            name: 'name2',
+            userid: 'U19947b3363cd6f914e292d4c45cb0558',
+            stationgroup: 'วราบดินทร์',
+            devicename: 'sony xx',
+            lat: '13',
+            lng: '100'
+        };
+
+        let _user = new User(user);
+        _user.save();
         request(app)
             .get('/api/reports')
             .expect(200)

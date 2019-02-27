@@ -27,10 +27,13 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
     app.route('/api/reports')
-        .get(controller.getPMData2
-            , controller.cookTemplateData
-            , controller.getReport2);
-            
+        .get(
+            controller.getUser,
+            controller.getPMData2,
+            controller.cookTemplateData,
+            // controller.forUserAndCookdata,
+            controller.getReport2);
+
     app.param('pmreportId', controller.getByID);
     app.param('userId', controller.getByUserID);
 }
