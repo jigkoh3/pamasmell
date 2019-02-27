@@ -31,7 +31,7 @@ module.exports = function (app) {
             controller.getUser,
             controller.getPMData2,
             controller.cookTemplateData,
-            // controller.forUserAndCookdata,
+            controller.forUserAndCookdata,
             controller.getReport2);
 
     app.param('pmreportId', controller.getByID);
