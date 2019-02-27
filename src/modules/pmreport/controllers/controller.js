@@ -299,7 +299,7 @@ exports.cookTemplateData = (req, res, next) => {
                     max: element.aqi,
                     sum: element.aqi,
                     lasted: element.aqi,
-                    userId: element.createby.id,
+                    userId: element.createby._id,
                     cnt: 1,
                     timeago: timeago,
                     actions: [
