@@ -183,6 +183,8 @@ exports.updateNews = (req, res, next) => {
             var newPmreport = new Pmreport({
                 name: req.userData.stationgroup,
                 aqi: req.body.events[0].message.text,
+                lat: req.userData.lat,
+                lng: req.userData.lng,
                 createby: {
                     _id: req.body.events[0].source.userId || '',
                     username: req.userData.name
@@ -246,7 +248,7 @@ exports.cookTemplateData = (req, res, next) => {
                 lst.push(element.name);
                 min = element.aqi;
                 max = element.aqi;
-                
+
                 // var d = new Date("2017-03-16T17:46:53.677");
                 // console.log(d.toLocaleString());
                 timeago = timeAgo(element.created + 35 * 1000);
@@ -254,6 +256,8 @@ exports.cookTemplateData = (req, res, next) => {
                 req.columns.push({
                     title: `${element.name}, Avg1Hr:${element.aqi}`,
                     text: `last update :${element.aqi}(${timeago})\n${min}|${max}`,
+                    lat: element.lat,
+                    lng: element.lng,
                     min: element.aqi,
                     max: element.aqi,
                     sum: element.aqi,
@@ -278,7 +282,7 @@ exports.cookTemplateData = (req, res, next) => {
                     req.columns[lst.indexOf(element.name)].max = element.aqi;
                 }
                 req.columns[lst.indexOf(element.name)].text = `Last update :${req.columns[lst.indexOf(element.name)].lasted}(${req.columns[lst.indexOf(element.name)].timeago})\n${req.columns[lst.indexOf(element.name)].min}|${req.columns[lst.indexOf(element.name)].max}`;
-                req.columns[lst.indexOf(element.name)].title = `${element.name}, Avg1Hr:${Math.round(req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt)}` ;
+                req.columns[lst.indexOf(element.name)].title = `${element.name}, Avg1Hr:${Math.round(req.columns[lst.indexOf(element.name)].sum / req.columns[lst.indexOf(element.name)].cnt)}`;
             }
 
         });

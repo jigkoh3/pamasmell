@@ -21,11 +21,13 @@ describe('Pmreport CRUD routes tests', function () {
             name: 'name2',
             userid: 'U19947b3363cd6f914e292d4c45cb0558',
             stationgroup: 'วราบดินทร์',
-            devicename: 'sony xx'
+            devicename: 'sony xx',
+            lat: '13',
+            lng: '100'
         };
 
-        // let _user = new User(user);
-        // _user.save();
+        let _user = new User(user);
+        _user.save();
         mockup = {
             name: 'name',
             aqi: 34,
@@ -35,8 +37,8 @@ describe('Pmreport CRUD routes tests', function () {
                 displayname: 'theera'
             }
         };
-        // done();
-        User.remove().exec(done);
+        done();
+        // User.remove().exec(done);
     });
 
     it('should be Pmreport get use token', (done) => {
@@ -274,11 +276,36 @@ describe('Pmreport CRUD routes tests', function () {
             });
     });
 
-    it('time ago test', (done)=>{
+    it('time ago test', (done) => {
         var aaa = timeAgo(Date.now() + 35 * 1000);
         assert.equal(aaa, "35 second ago");
-        assert.equal(moment(new Date("2017-03-16T17:46:53.677")).format('DD/MM/YYYY h:mm'),"16/03/2017 5:46");
+        assert.equal(moment(new Date("2017-03-16T17:46:53.677")).format('DD/MM/YYYY h:mm'), "16/03/2017 5:46");
         done();
+    })
+
+    xit('should be User report pm2.5 with location', (done) => {
+        request(app)
+            .post('/webhook')
+            .send({
+                "events": [{
+                    type: "message",
+                    replyToken: "240eb82ca256405b9295d3d94fb3e47a",
+                    source: { userId: "U19947b3363cd6f914e292d4c45cb0558", type: "user" },
+                    timestamp: 1548975245547,
+                    message: { type: "text", id: "9279140114603", text: "12" }
+                }],
+                destination: "Uff875d88b89f51a8bf83d2b4e04b4067"
+            })
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                assert.equal(resp.data, 'กรุณากรอกข้อมูลเป็นตัวเลข 0-300 (ค่า AQI)');
+
+                done();
+            });
     })
 
 

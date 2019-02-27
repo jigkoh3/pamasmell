@@ -13,6 +13,12 @@ var PmreportSchema = new Schema({
         type: Number,
         required: 'Please fill a Pmreport aqi',
     },
+    lat: {
+        type: String
+    },
+    lng: {
+        type: String
+    },
     created: {
         type: Date,
         default: Date.now
@@ -53,7 +59,13 @@ var UserSchema = new Schema({
         type: String,
         required: 'Please fill a User ID',
     },
-    stationgroup:{
+    lat: {
+        type: String
+    },
+    lng: {
+        type: String
+    },
+    stationgroup: {
         type: String,
         required: 'Please fill a Station Group',
     },
