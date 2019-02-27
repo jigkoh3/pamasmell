@@ -346,28 +346,50 @@ exports.getReport = (req, res, next) => {
 }
 exports.forUserAndCookdata = (req, res, next) => {
     req.dataOK = [];
-    req.user.forEach(user => {
-        req.columns.forEach(column => {
-            if(column.userId  === user.userid){
-                req.dataOK.push(column);
-            }else{
-                req.dataOK.push({
-                    name: user.name,
-                    title: ``,
-                    text: ``,
-                    lat: user.lat,
-                    lng: user.lng,
-                    min: 0,
-                    max: 0,
-                    sum: 0,
-                    lasted: 0,
-                    userId:user.userid,
-                    cnt: 1,
-                    timeago: "",
-                });
-            }
+    if (req.columns.length === 0) {
+        req.user.forEach(user => {
+
+            req.dataOK.push({
+                name: user.name,
+                title: ``,
+                text: ``,
+                lat: user.lat,
+                lng: user.lng,
+                min: 0,
+                max: 0,
+                sum: 0,
+                lasted: 0,
+                userId: user.userid,
+                cnt: 1,
+                timeago: "",
+            });
         })
-    })
+    }else{
+        req.user.forEach(user => {
+
+            req.columns.forEach(column => {
+                if (column.userId === user.userid) {
+                    req.dataOK.push(column);
+                } else {
+                    req.dataOK.push({
+                        name: user.name,
+                        title: ``,
+                        text: ``,
+                        lat: user.lat,
+                        lng: user.lng,
+                        min: 0,
+                        max: 0,
+                        sum: 0,
+                        lasted: 0,
+                        userId: user.userid,
+                        cnt: 1,
+                        timeago: "",
+                    });
+                }
+            })
+        })
+    }
+    
     next();
 }
 exports.getReport2 = (req, res, next) => {
