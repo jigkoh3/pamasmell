@@ -291,6 +291,7 @@ exports.cookTemplateData = (req, res, next) => {
                 timeago = timeAgo(element.created + 35 * 1000);
                 //timeago = moment(element.created).format('DD/MM/YYYY h:mm')
                 req.columns.push({
+                    name: element.name,
                     title: `${element.name}, Avg1Hr:${element.aqi}`,
                     text: `last update :${element.aqi}(${timeago})\n${min}|${max}`,
                     lat: element.lat,
@@ -343,20 +344,36 @@ exports.getReport = (req, res, next) => {
         next();
     }
 }
-// exports.forUserAndCookdata = (req, res, next) => {
-//     req.user.forEach(user => {
-//         req.columns.forEach(column => {
-//             if(column.userId  !== user.userId){
-
-//             }
-//         })
-//     })
-//     next();
-// }
+exports.forUserAndCookdata = (req, res, next) => {
+    req.dataOK = [];
+    req.user.forEach(user => {
+        req.columns.forEach(column => {
+            if(column.userId  === user.userid){
+                req.dataOK.push(column);
+            }else{
+                req.dataOK.push({
+                    name: user.name,
+                    title: ``,
+                    text: ``,
+                    lat: user.lat,
+                    lng: user.lng,
+                    min: 0,
+                    max: 0,
+                    sum: 0,
+                    lasted: 0,
+                    userId:user.userid,
+                    cnt: 1,
+                    timeago: "",
+                });
+            }
+        })
+    })
+    next();
+}
 exports.getReport2 = (req, res, next) => {
     res.jsonp({
         status: 200,
-        data: req.columns
+        data: req.dataOK
     });
 }
 
