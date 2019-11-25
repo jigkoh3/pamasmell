@@ -163,8 +163,37 @@ exports.delete = function (req, res) {
 };
 
 exports.getUserProfile = (req, res, next) => {
+
     if (req.body.events[0].message.type !== 'text') {
-        res.sendStatus(400)
+        if (req.body.events[0].message.type === "location") {
+            var newUser = new User({
+                name: req.body.events[0].source.userId,
+                userid: req.body.events[0].source.userId,
+                lat: req.body.events[0].message.latitude,
+                lng:req.body.events[0].message.longitude,
+                stationgroup: req.body.events[0].message.address,
+                devicename: "MI xx"
+            });
+            // newPmreport.createby = req.user;
+            newUser.save(function (err, data) {
+                if (err) {
+                    return res.status(400).send({
+                        status: 400,
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                } else {
+                    replyRegisterSuccess();
+                    res.jsonp({
+                        status: 200,
+                        data: data
+                    });
+
+                };
+            });
+
+        } else {
+            res.sendStatus(400);
+        }
     }
     User.findOne({ 'userid': req.body.events[0].source.userId }, function (err, data) {
         if (err) {
@@ -364,7 +393,7 @@ exports.forUserAndCookdata = (req, res, next) => {
                 timeago: "",
             });
         })
-    }else{
+    } else {
         req.user.forEach(user => {
 
             req.columns.forEach(column => {
@@ -389,7 +418,7 @@ exports.forUserAndCookdata = (req, res, next) => {
             })
         })
     }
-    
+
     next();
 }
 exports.getReport2 = (req, res, next) => {
@@ -436,6 +465,7 @@ exports.hook = (req, res) => {
                 });
             };
         });
+
     } else if (req.body.events[0].message.text === '?') {
         replySummaryReport(req.body);
         res.jsonp({
@@ -462,6 +492,27 @@ const reply = (bodyResponse) => {
         messages: [{
             type: `text`,
             text: `ขอบคุณครับสำหรับข้อมูล : ${bodyResponse.events[0].message.text}`
+        }]
+    })
+    request.post({
+        url: 'https://api.line.me/v2/bot/message/reply',
+        headers: headers,
+        body: body
+    }, (err, res, body) => {
+        console.log('status = ' + res.statusCode);
+    });
+}
+
+const replyRegisterSuccess = (bodyResponse) => {
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
+    }
+    let body = JSON.stringify({
+        replyToken: bodyResponse.events[0].replyToken,
+        messages: [{
+            type: `text`,
+            text: `การลงทะเบียนสำเร็จ ท่านสามารถรายงานผลคุณภาพเป็นตัวเลขตั่งแต่ (0-300) ได้แล้วครับ`
         }]
     })
     request.post({
@@ -528,11 +579,18 @@ const replyNotAuthorize = (bodyResponse) => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer T9lDXjk9Hn7JIcIafSWNSasnnOcTWpZZziyQHO+91xhsw/6r3BQZkf9WYw6wpnAAG6n+spDjNXWoQKDZsUw+5ZIiZrXtrHhvPXs72nnIxdLFZ1RbC6/zQAXWQr7G2iHKYwVj6I4QzfaUmxe6AhffZwdB04t89/1O/w1cDnyilFU='
     }
+    // let body = JSON.stringify({
+    //     replyToken: bodyResponse.events[0].replyToken,
+    //     messages: [{
+    //         type: `text`,
+    //         text: `ท่านยังไม่ได้ลงทะเบียนกับผู้ดูแลระบบ โดยอ้างอิงเลขที่ : ${bodyResponse.events[0].source.userId}`
+    //     }]
+    // })
     let body = JSON.stringify({
         replyToken: bodyResponse.events[0].replyToken,
         messages: [{
             type: `text`,
-            text: `ท่านยังไม่ได้ลงทะเบียนกับผู้ดูแลระบบ โดยอ้างอิงเลขที่ : ${bodyResponse.events[0].source.userId}`
+            text: `กรุณาส่งพิกัด Location ที่ท่านตรวจวัด และ รายงานคุณภาพอากาศ`
         }]
     })
     request.post({
