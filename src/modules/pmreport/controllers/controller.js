@@ -171,7 +171,7 @@ exports.getUserProfile = (req, res, next) => {
                 userid: req.body.events[0].source.userId,
                 lat: req.body.events[0].message.latitude,
                 lng:req.body.events[0].message.longitude,
-                stationgroup: req.body.events[0].message.address,
+                stationgroup: req.body.events[0].message.title,
                 devicename: "MI xx"
             });
             // newPmreport.createby = req.user;
