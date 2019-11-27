@@ -494,7 +494,6 @@ exports.iotCreate = (req, res)=>{
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            reply(req.body);
             res.jsonp({
                 status: 200,
                 data: data
