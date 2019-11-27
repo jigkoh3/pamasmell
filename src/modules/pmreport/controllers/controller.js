@@ -482,6 +482,27 @@ exports.hook = (req, res) => {
 
 }
 
+exports.iotCreate = (req, res)=>{
+    var newPmreport = new Pmreport({
+        name: req.query.name,
+        aqi: rreq.query.aqi
+    });
+    newPmreport.save(function (err, data) {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            reply(req.body);
+            res.jsonp({
+                status: 200,
+                data: data
+            });
+        };
+    });
+}
+
 const reply = (bodyResponse) => {
     let headers = {
         'Content-Type': 'application/json',

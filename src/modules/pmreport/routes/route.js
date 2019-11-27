@@ -34,6 +34,9 @@ module.exports = function (app) {
             controller.forUserAndCookdata,
             controller.getReport2);
 
+    app.route('/api/iotreport')
+        .get(controller.iotCreate);
+
     app.param('pmreportId', controller.getByID);
     app.param('userId', controller.getByUserID);
 }
