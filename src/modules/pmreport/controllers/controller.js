@@ -485,7 +485,7 @@ exports.hook = (req, res) => {
 exports.iotCreate = (req, res)=>{
     var newPmreport = new Pmreport({
         name: req.query.name,
-        aqi: rreq.query.aqi
+        aqi: req.query.aqi
     });
     newPmreport.save(function (err, data) {
         if (err) {
