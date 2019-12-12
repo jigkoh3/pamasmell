@@ -558,11 +558,13 @@ function formatTime(date) {
     minutes = "" + d.getMinutes(),
     seconds = d.getSeconds();
 
+  if (hour > 23) hour = hour - 24;
+
   if (hour.length < 2) hour = "0" + hour;
   if (minutes.length < 2) minutes = "0" + minutes;
   if (seconds.length < 2) seconds = "0" + seconds;
 
-  return [hour, minutes, seconds].join("-");
+  return [hour, minutes, seconds].join(":");
 }
 
 function formatDate(date) {
