@@ -541,7 +541,7 @@ exports.excelreports = function(req, res, next) {
   pm2dot5.forEach(function(itm) {
     items.push({
       reportdate: formatDate(itm.created),
-      reporttime : formatTime(itm.created),//new Date(itm.created).toLocaleTimeString(),
+      reporttime: formatTime(itm.created), //new Date(itm.created).toLocaleTimeString(),
       reporter: itm.name,
       value: itm.aqi,
       lat: itm.lat,
@@ -554,7 +554,7 @@ exports.excelreports = function(req, res, next) {
 
 function formatTime(date) {
   var d = new Date(date),
-    hour = "" + d.getHours(),
+    hour = "" + (d.getHours() + 7),
     minutes = "" + d.getMinutes(),
     seconds = d.getSeconds();
 
