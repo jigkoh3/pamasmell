@@ -526,7 +526,7 @@ exports.startdate = function (req, res, next, enddate) {
     pm2dot5.forEach(function(itm){
         items.push({
             reportdate : formatDate(itm.created),
-            reporttime : new Date(date).toLocaleTimeString(),
+            reporttime : new Date(itm.created).toLocaleTimeString(),
             reporter : itm.name,
             value : itm.aqi,
             lat : itm.lat,
