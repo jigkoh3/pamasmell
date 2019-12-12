@@ -506,7 +506,7 @@ exports.startdate = function (req, res, next, enddate) {
     var end = new Date(enddate);
     var startdate = req.startdate;
     Pmreport.find({ created: { $gte: startdate, $lte: end }})
-    .sort('created').populate('user')
+    .sort('-created')
     .exec(function (err, data) {
       if (err) {
         return next(err);
