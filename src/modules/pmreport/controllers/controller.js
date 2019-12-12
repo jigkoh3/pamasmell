@@ -502,6 +502,53 @@ exports.iotCreate = (req, res)=>{
     });
 }
 
+exports.startdate = function (req, res, next, enddate) {
+    var end = new Date(enddate);
+    var startdate = req.startdate;
+    Pmreport.find({ created: { $gte: startdate, $lte: end }})
+    .sort('created').populate('user')
+    .exec(function (err, data) {
+      if (err) {
+        return next(err);
+      } else if (!data) {
+        return res.status(404).send({
+          message: 'No data found'
+        });
+      }
+      req.pm2dot5 = data;
+      next();
+    });
+  };
+
+  exports.excelreports = function (req, res, next) {
+    var items = [];
+    var pm2dot5 = req.pm2dot5 ? req.pm2dot5 : [];
+    pm2dot5.forEach(function(itm){
+        items.push({
+            reportdate : formatDate(itm.created),
+            reporter : itm.name,
+            value : itm.aqi,
+            lat : itm.lat,
+            lng : itm.lng
+          });
+    });
+    res.xls('data.xlsx', items);
+    //res.jsonp({ orders: orderslist});
+  
+  };
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+  
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+  
+    return [year, month, day].join('-');
+  }
+
 const reply = (bodyResponse) => {
     let headers = {
         'Content-Type': 'application/json',

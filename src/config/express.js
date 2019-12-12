@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
+const json2xls = require('json2xls');
 const config = require('./config');
 const app = express();
 
@@ -31,6 +32,8 @@ app.use('/api/', jwt({
     secret: config.jwt.secret,
     credentialsRequired: false
 }));
+
+app.use(json2xls.middleware);
 
 app.get('/', function (req, res) {
     res.jsonp({
