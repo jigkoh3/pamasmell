@@ -556,7 +556,7 @@ function formatTime(date) {
   var d = new Date(date),
     hour = "" + (d.getHours() + 7),
     minutes = "" + d.getMinutes(),
-    seconds = d.getSeconds();
+    seconds = "" + d.getSeconds();
 
   if (hour > 23) hour = hour - 24;
 
