@@ -51,6 +51,8 @@ module.exports = function(app) {
     .route("/api/excelreports/:startdate/:enddate")
     .get(controller.excelreports);
 
+  app.route("/api/aqi").get(controller.aqi);
+
   app.param("pmreportId", controller.getByID);
   app.param("userId", controller.getByUserID);
 

@@ -552,6 +552,24 @@ exports.excelreports = function(req, res, next) {
   //res.jsonp({ orders: orderslist});
 };
 
+exports.aqi = function(req, res) {
+  Pmreport.findOne({ name: "หลังวัดประชุมราษฎร์" })
+    .sort("-created")
+    .exec(function(err, data) {
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp({
+          status: 200,
+          data: data
+        });
+      }
+    });
+};
+
 function formatTime(date) {
   var d = new Date(date),
     hour = "" + (d.getHours() + 7),
