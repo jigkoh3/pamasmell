@@ -571,7 +571,7 @@ exports.aqi = function(req, res) {
 };
 
 exports.history = function(req, res) {
-  Pmreport.findOne({
+  Pmreport.find({
     name: "หลังวัดประชุมราษฎร์",
     created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }
   })
