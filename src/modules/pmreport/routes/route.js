@@ -53,6 +53,8 @@ module.exports = function(app) {
 
   app.route("/api/aqi").get(controller.aqi);
 
+  app.route("/api/history").get(controller.history);
+
   app.param("pmreportId", controller.getByID);
   app.param("userId", controller.getByUserID);
 

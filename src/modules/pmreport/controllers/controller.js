@@ -570,6 +570,27 @@ exports.aqi = function(req, res) {
     });
 };
 
+exports.history = function(req, res) {
+  Pmreport.findOne({
+    name: "หลังวัดประชุมราษฎร์",
+    created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }
+  })
+    .sort("-created")
+    .exec(function(err, data) {
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp({
+          status: 200,
+          data: data
+        });
+      }
+    });
+};
+
 function formatTime(date) {
   var d = new Date(date),
     hour = "" + (d.getHours() + 7),
