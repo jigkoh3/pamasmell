@@ -565,6 +565,7 @@ exports.aqi = function(req, res) {
         data.name = "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ"
         data.lat = '13.9303958';
         data.lng = '100.7286754';
+        data.createby._id = 'tripat_01';
         res.jsonp({
           status: 200,
           data: data
