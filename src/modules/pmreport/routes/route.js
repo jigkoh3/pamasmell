@@ -53,7 +53,7 @@ module.exports = function(app) {
 
   app.route("/api/aqi").get(controller.aqi);
 
-  // app.route("/api/aqi-list").get(controller.aqi-list);
+  app.route("/api/aqis").get(controller.aqis);
 
   app.route("/api/history").get(controller.history);
 

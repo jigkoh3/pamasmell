@@ -499,13 +499,21 @@ exports.hook = (req, res) => {
 
 exports.iotCreate = (req, res) => {
   var newPmreport = new Pmreport({
-    name: "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name === "24:0A:C4:30:D1:A0" ? "1": "2",
+    name:
+      "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name ===
+      "24:0A:C4:30:D1:A0"
+        ? "1"
+        : "2",
     aqi: req.query.aqi,
     lat: "13.9303958",
     lng: "100.7286754",
     createby: {
       _id: req.query.name,
-      username: "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name === "24:0A:C4:30:D1:A0" ? "1": "2"
+      username:
+        "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name ===
+        "24:0A:C4:30:D1:A0"
+          ? "1"
+          : "2"
     }
   });
   newPmreport.save(function(err, data) {
@@ -580,7 +588,39 @@ exports.aqi = function(req, res) {
     });
 };
 
-
+exports.aqis = function(req, res) {
+  Pmreport.aggregate([
+    {
+      $group: {
+        _id: "$createby._id",
+        name: { $last: "$name" },
+        aqi: { $last: "$aqi" },
+        lat: { $last: "$lat" },
+        lng: { $last: "$lng" },
+        createby: { $last: "$createby" },
+        created: { $last: "$created" }
+      }
+    }
+  ])
+    .sort("-created")
+    .exec(function(err, data) {
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        // data.name = "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ";
+        // data.lat = "13.9303958";
+        // data.lng = "100.7286754";
+        // data.createby._id = "tripat_01";
+        res.jsonp({
+          status: 200,
+          data: data
+        });
+      }
+    });
+};
 
 exports.history = function(req, res) {
   Pmreport.find({
