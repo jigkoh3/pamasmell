@@ -559,7 +559,7 @@ exports.excelreports = function(req, res, next) {
 };
 
 exports.aqi = function(req, res) {
-  Pmreport.findOne({ name: "24:0A:C4:30:D1:A0" })
+  Pmreport.findOne({ name: "หลังวัดประชุมราษฎร์" })
     .sort("-created")
     .exec(function(err, data) {
       if (err) {
@@ -568,10 +568,10 @@ exports.aqi = function(req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-        data.name = "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ";
-        data.lat = "13.9303958";
-        data.lng = "100.7286754";
-        data.createby._id = "tripat_01";
+        // data.name = "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ";
+        // data.lat = "13.9303958";
+        // data.lng = "100.7286754";
+        // data.createby._id = "tripat_01";
         res.jsonp({
           status: 200,
           data: data
@@ -580,9 +580,12 @@ exports.aqi = function(req, res) {
     });
 };
 
+
+
 exports.history = function(req, res) {
   Pmreport.find({
-    name: "24:0A:C4:30:D1:A0",
+    //name: "24:0A:C4:30:D1:A0",
+    name: "หลังวัดประชุมราษฎร์",
     created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }
   })
     .limit(20)
