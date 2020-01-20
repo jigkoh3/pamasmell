@@ -499,8 +499,14 @@ exports.hook = (req, res) => {
 
 exports.iotCreate = (req, res) => {
   var newPmreport = new Pmreport({
-    name: req.query.name,
-    aqi: req.query.aqi
+    name: "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name === "24:0A:C4:30:D1:A0" ? "1": "2",
+    aqi: req.query.aqi,
+    lat: "13.9303958",
+    lng: "100.7286754",
+    createby: {
+      _id: req.query.name,
+      username: "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name === "24:0A:C4:30:D1:A0" ? "1": "2"
+    }
   });
   newPmreport.save(function(err, data) {
     if (err) {
