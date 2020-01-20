@@ -8,8 +8,8 @@ var mongoose = require("mongoose"),
   request = require("request");
 var timeAgo = require("node-time-ago");
 var moment = require("moment");
-exports.getList = function(req, res) {
-  Pmreport.find(function(err, datas) {
+exports.getList = function (req, res) {
+  Pmreport.find(function (err, datas) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -24,8 +24,8 @@ exports.getList = function(req, res) {
   });
 };
 
-exports.Users = function(req, res) {
-  User.find(function(err, datas) {
+exports.Users = function (req, res) {
+  User.find(function (err, datas) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -40,10 +40,10 @@ exports.Users = function(req, res) {
   });
 };
 
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var newPmreport = new Pmreport(req.body);
   // newPmreport.createby = req.user;
-  newPmreport.save(function(err, data) {
+  newPmreport.save(function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -58,7 +58,7 @@ exports.create = function(req, res) {
   });
 };
 
-exports.getByID = function(req, res, next, id) {
+exports.getByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       status: 400,
@@ -66,7 +66,7 @@ exports.getByID = function(req, res, next, id) {
     });
   }
 
-  Pmreport.findById(id, function(err, data) {
+  Pmreport.findById(id, function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -79,17 +79,17 @@ exports.getByID = function(req, res, next, id) {
   });
 };
 
-exports.userById = function(req, res) {
+exports.userById = function (req, res) {
   res.jsonp({
     status: 200,
     data: req.data
   });
 };
 
-exports.createUser = function(req, res) {
+exports.createUser = function (req, res) {
   var newUser = new User(req.body);
   // newPmreport.createby = req.user;
-  newUser.save(function(err, data) {
+  newUser.save(function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -104,8 +104,8 @@ exports.createUser = function(req, res) {
   });
 };
 
-exports.getByUserID = function(req, res, next, id) {
-  User.findOne({ userid: id }, function(err, data) {
+exports.getByUserID = function (req, res, next, id) {
+  User.findOne({ userid: id }, function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -118,18 +118,18 @@ exports.getByUserID = function(req, res, next, id) {
   });
 };
 
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   res.jsonp({
     status: 200,
     data: req.data ? req.data : []
   });
 };
 
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var updPmreport = _.extend(req.data, req.body);
   updPmreport.updated = new Date();
   updPmreport.updateby = req.user;
-  updPmreport.save(function(err, data) {
+  updPmreport.save(function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -144,8 +144,8 @@ exports.update = function(req, res) {
   });
 };
 
-exports.delete = function(req, res) {
-  req.data.remove(function(err, data) {
+exports.delete = function (req, res) {
+  req.data.remove(function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -172,7 +172,7 @@ exports.getUserProfile = (req, res, next) => {
         devicename: "MI xx"
       });
       // newPmreport.createby = req.user;
-      newUser.save(function(err, data) {
+      newUser.save(function (err, data) {
         if (err) {
           return res.status(400).send({
             status: 400,
@@ -190,7 +190,7 @@ exports.getUserProfile = (req, res, next) => {
       res.sendStatus(400);
     }
   }
-  User.findOne({ userid: req.body.events[0].source.userId }, function(
+  User.findOne({ userid: req.body.events[0].source.userId }, function (
     err,
     data
   ) {
@@ -221,7 +221,7 @@ exports.updateNews = (req, res, next) => {
           username: req.userData.name
         }
       });
-      newPmreport.save(function(err, data) {
+      newPmreport.save(function (err, data) {
         if (err) {
           return res.status(400).send({
             status: 400,
@@ -362,15 +362,15 @@ exports.cookTemplateData = (req, res, next) => {
         }
         req.columns[lst.indexOf(element.name)].text = `Last update :${
           req.columns[lst.indexOf(element.name)].lasted
-        }(${req.columns[lst.indexOf(element.name)].timeago})\n${
+          }(${req.columns[lst.indexOf(element.name)].timeago})\n${
           req.columns[lst.indexOf(element.name)].min
-        }|${req.columns[lst.indexOf(element.name)].max}`;
+          }|${req.columns[lst.indexOf(element.name)].max}`;
         req.columns[lst.indexOf(element.name)].title = `${
           element.name
-        }, Avg1Hr:${Math.round(
-          req.columns[lst.indexOf(element.name)].sum /
+          }, Avg1Hr:${Math.round(
+            req.columns[lst.indexOf(element.name)].sum /
             req.columns[lst.indexOf(element.name)].cnt
-        )}`;
+          )}`;
       }
     });
     next();
@@ -468,7 +468,7 @@ exports.hook = (req, res) => {
         displayname: "theera"
       }
     });
-    newPmreport.save(function(err, data) {
+    newPmreport.save(function (err, data) {
       if (err) {
         return res.status(400).send({
           status: 400,
@@ -501,7 +501,7 @@ exports.iotCreate = (req, res) => {
   var newPmreport = new Pmreport({
     name:
       "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name ===
-      "24:0A:C4:30:D1:A0"
+        "24:0A:C4:30:D1:A0"
         ? "1"
         : "2",
     aqi: req.query.aqi,
@@ -511,12 +511,12 @@ exports.iotCreate = (req, res) => {
       _id: req.query.name,
       username:
         "โรงเรียนไตรพัฒน์ สถานีรายงานอัตโนมัติ " + req.query.name ===
-        "24:0A:C4:30:D1:A0"
+          "24:0A:C4:30:D1:A0"
           ? "1"
           : "2"
     }
   });
-  newPmreport.save(function(err, data) {
+  newPmreport.save(function (err, data) {
     if (err) {
       return res.status(400).send({
         status: 400,
@@ -531,12 +531,12 @@ exports.iotCreate = (req, res) => {
   });
 };
 
-exports.startdate = function(req, res, next, enddate) {
+exports.startdate = function (req, res, next, enddate) {
   var end = new Date(enddate);
   var startdate = req.startdate;
   Pmreport.find({ created: { $gte: startdate, $lte: end } })
     .sort("-created")
-    .exec(function(err, data) {
+    .exec(function (err, data) {
       if (err) {
         return next(err);
       } else if (!data) {
@@ -549,10 +549,10 @@ exports.startdate = function(req, res, next, enddate) {
     });
 };
 
-exports.excelreports = function(req, res, next) {
+exports.excelreports = function (req, res, next) {
   var items = [];
   var pm2dot5 = req.pm2dot5 ? req.pm2dot5 : [];
-  pm2dot5.forEach(function(itm) {
+  pm2dot5.forEach(function (itm) {
     items.push({
       reportdate: formatDate(itm.created),
       reporttime: formatTime(itm.created), //new Date(itm.created).toLocaleTimeString(),
@@ -566,10 +566,10 @@ exports.excelreports = function(req, res, next) {
   //res.jsonp({ orders: orderslist});
 };
 
-exports.aqi = function(req, res) {
+exports.aqi = function (req, res) {
   Pmreport.findOne({ name: "หลังวัดประชุมราษฎร์" })
     .sort("-created")
-    .exec(function(err, data) {
+    .exec(function (err, data) {
       if (err) {
         return res.status(400).send({
           status: 400,
@@ -588,8 +588,9 @@ exports.aqi = function(req, res) {
     });
 };
 
-exports.aqis = function(req, res) {
+exports.aqis = function (req, res) {
   Pmreport.aggregate([
+    { $match: { lat: "13.9303958", lng: "100.7286754", created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } } },
     {
       $group: {
         _id: "$createby._id",
@@ -603,7 +604,7 @@ exports.aqis = function(req, res) {
     }
   ])
     .sort("-created")
-    .exec(function(err, data) {
+    .exec(function (err, data) {
       if (err) {
         return res.status(400).send({
           status: 400,
@@ -622,7 +623,7 @@ exports.aqis = function(req, res) {
     });
 };
 
-exports.history = function(req, res) {
+exports.history = function (req, res) {
   Pmreport.find({
     //name: "24:0A:C4:30:D1:A0",
     name: "หลังวัดประชุมราษฎร์",
@@ -630,7 +631,7 @@ exports.history = function(req, res) {
   })
     .limit(20)
     .sort("-created")
-    .exec(function(err, data) {
+    .exec(function (err, data) {
       if (err) {
         return res.status(400).send({
           status: 400,
