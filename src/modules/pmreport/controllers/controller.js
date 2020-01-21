@@ -582,7 +582,8 @@ exports.aqi = function (req, res) {
 
 exports.aqis = function (req, res) {
   Pmreport.aggregate([
-    { $match: { lat: "13.9303958", lng: "100.7286754", created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } } },
+    // { $match: { lat: "13.9303958", lng: "100.7286754", created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } } },
+    { $match: { created: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } } },
     {
       $group: {
         _id: "$createby._id",
