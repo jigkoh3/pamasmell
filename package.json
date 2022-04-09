@@ -20,7 +20,7 @@
     "glob": "^7.1.2",
     "json2xls": "^0.1.2",
     "lodash": "^4.17.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.0.12",
     "node-time-ago": "^1.0.0",
     "request": "^2.88.0"
